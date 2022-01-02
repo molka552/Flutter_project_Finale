@@ -1,8 +1,7 @@
 import 'package:fluterfinale/Comm/NavBar.dart';
-import 'package:fluterfinale/DataBaseHandler/DbHelper.dart';
 import 'package:fluterfinale/Model/FamilleCom.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fluterfinale/DataBaseHandler/DbHelper.dart';
 import '../constant.dart';
 class Liste extends StatefulWidget {
   const Liste({Key? key}) : super(key: key);
@@ -12,13 +11,7 @@ class Liste extends StatefulWidget {
 }
 
 class _ListeState extends State<Liste> {
-  late DbHelper helper;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    helper=DbHelper();
-  }
+  final helper = DbHelper.instance;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +30,7 @@ class _ListeState extends State<Liste> {
         ],
       ),
 body: FutureBuilder(
-  future: helper.allFamille(),
+  future: helper.getAllCom(),
   builder: (BuildContext context, AsyncSnapshot<List<dynamic>> snapshot) {
     if(!snapshot.hasData){
       return CircularProgressIndicator();

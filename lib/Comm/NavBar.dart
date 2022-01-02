@@ -3,7 +3,7 @@ import 'package:fluterfinale/view/AjouterMembres.dart';
 import 'package:fluterfinale/view/EnregistrerEmprunts.dart';
 import 'package:fluterfinale/view/EnregistrerRetour.dart';
 import 'package:fluterfinale/view/ListeCNR.dart';
-import 'package:fluterfinale/view/ModifierQt.dart';
+import 'package:fluterfinale/view/ModifierQtView.dart';
 import 'package:fluterfinale/view/ajouterFamille.dart';
 import 'package:flutter/material.dart';
 class NavBar extends StatelessWidget {
@@ -45,7 +45,7 @@ ListTile(
   ListTile(
     leading:Icon(Icons.settings,color:Colors.blue),
     title:Text('Modifier quantite') ,
-    onTap: ()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ModifierQt())),
+    onTap:()=>Navigator.of(context).push(MaterialPageRoute(builder: (context) => ModifierQtView())),
   ),
   Divider(),
   ListTile(

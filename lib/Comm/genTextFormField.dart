@@ -29,10 +29,10 @@ class getTextFormField extends StatelessWidget {
         keyboardType:inputType,
         validator: (value) {
           if (value == null || value.isEmpty) {
-            return 'Please enter $hintName';
+            return "S'il vous plait entrez  $hintName";
           }
           if (hintName == "Email" && !validateEmail(value)) {
-            return 'Please Enter Valid Email';
+            return 'Veuillez entrer un e-mail valide';
           }
           return null;
         },

@@ -7,7 +7,7 @@ import 'package:fluterfinale/constant.dart';
 import 'package:fluterfinale/view/LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:toast/toast.dart';
+
 
 class AjouterCl extends StatefulWidget {
   const AjouterCl({Key? key}) : super(key: key);
@@ -25,11 +25,7 @@ class _AjouterClState extends State<AjouterCl> {
   final _conCPassword = TextEditingController();
   var dbHelper;
 
-  @override
-  void initState() {
-    super.initState();
-    dbHelper = DbHelper();
-  }
+  final helper = DbHelper.instance;
 
   signUp() async {
     String uid = _conUserId.text;

@@ -7,7 +7,7 @@ import 'package:fluterfinale/constant.dart';
 import 'package:fluterfinale/view/LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:toast/toast.dart';
+
 
 class EnregistrerR extends StatefulWidget {
   const EnregistrerR({Key? key}) : super(key: key);
@@ -24,12 +24,7 @@ class _EnregistrerRState extends State<EnregistrerR> {
   final _conPassword = TextEditingController();
   final _conCPassword = TextEditingController();
   var dbHelper;
-
-  @override
-  void initState() {
-    super.initState();
-    dbHelper = DbHelper();
-  }
+  final helper = DbHelper.instance;
 
   signUp() async {
     String uid = _conUserId.text;

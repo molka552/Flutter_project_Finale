@@ -1,16 +1,16 @@
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:fluterfinale/Comm/NavBar.dart';
-import 'package:fluterfinale/Comm/comHelper.dart';
 import 'package:fluterfinale/Comm/genTextFormField.dart';
 import 'package:fluterfinale/DataBaseHandler/DbHelper.dart';
-import 'package:fluterfinale/Model/ComposantModel.dart';
-import 'package:fluterfinale/Model/FamilleCom.dart';
-import 'package:fluterfinale/view/HomeForm.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constant.dart';
+import 'HomeForm.dart';
+
+
+
 
 class NewC extends StatefulWidget {
   const NewC({Key? key}) : super(key: key);
@@ -18,126 +18,251 @@ class NewC extends StatefulWidget {
   @override
   _NewCState createState() => _NewCState();
 }
-
 class _NewCState extends State<NewC> {
-  final _formKey = new GlobalKey<FormState>();
-  final _conC = TextEditingController();
-  final _conS = TextEditingController();
-  final _conQ = TextEditingController();
-  late DbHelper helper;
+
+  final componentId= TextEditingController();
+  final componentRef = TextEditingController();
+  final quantity=TextEditingController();
+
+  final dbaHelper = DbHelper.instance;
+
+  var SelectedValue;
+
+  late List<String> myList;
+
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState(){
     super.initState();
-    helper=DbHelper();
+    myList=[];
+    _getCategory();
   }
-  ajoutC() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      CompModel CModel = CompModel({'nomC':_conC,'nomF':_conS,'qt':_conQ});
-      int id =await helper.saveDataC(CModel);
-      print('composant id is $id');
-      if(id!=null){
-        alertDialog(context, "Enregitré avec succés");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => HomeForm()));}
-      else{
-        alertDialog(context, "Erreur: échec de l'enregistrement des données");
-      };
+
+  _getCategory() async {
+
+    List<String> items=[];
+    await dbaHelper.getAllCat().then((value) {
+      for (var i = 0; i < value.length; i++) {
+        items.add(value[i]['category_name']);
+      }
     }
+    );
+    myList=items;
+    setState(() {
+
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     Size size=MediaQuery.of(context).size;
+    print(myList);
     return Scaffold(
+
       drawer: NavBar(
       ),
       appBar: AppBar(
-        title: Text("Ajouter Composant"),
+        title: Text("Ajouter Composant",),
         backgroundColor: kPrimaryColor,
         elevation: 0.1,
         actions: <Widget>[
-          new IconButton(onPressed: (){}, icon: Icon(Icons.logout,color: Colors.white,))
+          new IconButton(onPressed: (){ Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => HomeForm()),
+                  (Route<dynamic> route) => false);}, icon: Icon(Icons.home,color: Colors.white,))
         ],
       ),
-      body: Form(
-        child: SingleChildScrollView(
-          reverse: true,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child:Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset("assets/images/m16.svg",height:size.height*0.35,
+                ),
+                getTextFormField(controller: componentId, hintName:'Id Composant', icon: Icons.drive_file_rename_outline),
+                SizedBox(height: 10.0),
+                getTextFormField(controller: componentRef, hintName:'Ref Composant', icon: Icons.drive_file_rename_outline),
+                SizedBox(height: 10.0),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0),
+                  margin: EdgeInsets.only(top: 5.0),
+                  child: TextFormField(
+                    controller: quantity,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                    ],
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        borderSide: BorderSide(color: Colors.transparent),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                          borderSide: BorderSide(color: Colors.deepPurpleAccent)
+                      ),
+                      prefixIcon: Icon(Icons.confirmation_number_outlined),
+                      hintText: "Quantité",
+                      fillColor:kPrimaryLightColor,
+                      filled: true,
 
-              SvgPicture.asset("assets/images/m16.svg",height:size.height*0.35,
-              ),
-              getTextFormField(controller: _conC, hintName:'Nom Composant', icon: Icons.drive_file_rename_outline),
-              SizedBox(height: 10.0),
-
-              Container(
-  decoration: BoxDecoration(
-   borderRadius: BorderRadius.circular(30),
-  ),
-  padding: EdgeInsets.symmetric(horizontal: 20.0),
-  margin:EdgeInsets.only(top:20.0),
-  child: Column(
-mainAxisAlignment: MainAxisAlignment.center,
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children:<Widget> [
-      DropDownField(
-controller: _conS,
-        hintText: "sélectionner",
-        enabled: true,
-        itemsVisibleInDropdown:c.length ,
-        items:c,
-        onValueChanged: (value){
-  FocusScope.of(context).requestFocus(new FocusNode());
-setState(() {
-  selectC=value;
-});
-
-        },
-      ),
-      Text(selectC)
-    ],
-  ),
-
-
-
-),
-              SizedBox(height: 10.0),
-              getTextFormField(controller: _conQ, hintName:'Qt', icon: Icons.family_restroom),
-
-              Container(
-                margin: EdgeInsets.all(20.0),
-                width: double.infinity,
-                child: FlatButton(
-                  child: Text(
-                    'Enregistrer',
-                    style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                  onPressed: ajoutC,
                 ),
-                decoration: BoxDecoration(
-                  color: kPrimaryColor,
-                  borderRadius: BorderRadius.circular(30.0),
+                Container(
+                    margin: EdgeInsets.all(30.0),
+                    width: double.infinity,
+                    child:DropdownButton<String>(
+                      hint: Text('Choisir une catégorie'),
+                      value: null,
+                      onChanged:(newValue){
+                        setState(() {
+                          SelectedValue=newValue.toString();
+                          print(SelectedValue);
+                        });
+                      },
+                      items: myList.map<DropdownMenuItem<String>>((ValueItem){
+                        return DropdownMenuItem<String>(
+                            value: ValueItem,
+                            child:Text(
+                              ValueItem,
+                              style: TextStyle(fontWeight: FontWeight.bold,
+                                  fontSize: 20),
+                            )
+                        );
+                      }).toList(),
+                    )
                 ),
-              ),
-            ],
+
+                Container(
+                  margin: EdgeInsets.all(30.0),
+                  width: double.infinity,
+                  child: FlatButton(
+                    onPressed: () {
+                      add();
+                    },
+                    child: Text(
+                      "Enregistrer",
+                      style: TextStyle(color:Colors.white),
+                    ),
+                  ),
+                  decoration: BoxDecoration(
+                      color:kPrimaryColor,
+                      borderRadius: BorderRadius.circular(30.0)
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-
       ),
     );
   }
+
+  Future<void> add() async {
+    String id = componentId.text;
+    String ref = componentRef.text;
+    String qte = quantity.text;
+
+    if (id.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Pls enter ID of the component",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+    } else if (ref.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Pls enter Reference",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+    } else if (qte.isEmpty) {
+      Fluttertoast.showToast(
+          msg: "Pls enter Quantity",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+    } else if(SelectedValue == null){
+      Fluttertoast.showToast(
+          msg: "pls chose category",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.black,
+          fontSize: 16.0
+      );
+    }
+    else {
+      var value= await dbaHelper.getIdCategory(SelectedValue);
+      insert(int.parse(qte),value![0]['category_id']);
+    }
+  }
+
+
+  void insert(int qte,String category) async{
+
+
+
+    Map<String, dynamic> row = {
+      DbHelper.ComponentId: componentId.text,
+      DbHelper.ComponentName: componentRef.text,
+      DbHelper.quantity: qte,
+      DbHelper.cate: category
+    };
+
+    try {
+      final id = await dbaHelper.insertComponent(row);
+      if (id >0)  {
+        Fluttertoast.showToast(
+            msg: "successfully saved",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.blue,
+            textColor: Colors.white,
+            fontSize: 16.0
+        );
+      }
+
+    }
+    catch (error) {
+      print(error);
+      Fluttertoast.showToast(
+          msg: "error occured",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.blue,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+    }
+
+
+  }
+  @override
+  void dispose() {
+    componentId.dispose();
+    componentRef.dispose();
+    quantity.dispose();
+    super.dispose();
+  }
 }
-String selectC="";
-List<String> c=[
-  "Tunis",
-  "Sfax",
-  "Sousse",
-  "Ariana",
-  "Kairouan",
-  "Gabès",
-  "Bizerte",
-  "Gafsa",
-  "El Mourouj",
-];
+
+
+
+

@@ -2,40 +2,23 @@ import 'package:fluterfinale/Comm/NavBar.dart';
 import 'package:fluterfinale/DataBaseHandler/DbHelper.dart';
 import 'package:flutter/material.dart';
 
+
 import '../constant.dart';
-import 'Recherche.dart';
+import 'ModifierBackend.dart';
 
-class HomeForm extends StatefulWidget {
-  const HomeForm({Key? key}) : super(key: key);
-
-  @override
-  _HomeFormState createState() => _HomeFormState();
-}
-class _HomeFormState extends State<HomeForm> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.lightGreen
-      ),
-      home: HomePage(),
-    );
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class ModifierQtView extends StatefulWidget {
+  const ModifierQtView({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _ModifierQtViewState createState() => _ModifierQtViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+
+class  _ModifierQtViewState extends State<ModifierQtView> {
 
   final dbaHelper = DbHelper.instance;
 
-  late List<Map<String, dynamic>>  myComp;
+  late List<Map<String, dynamic>>  myComp=[];
 
   @override
   void initState(){
@@ -57,19 +40,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavBar(
-        ),
-        appBar: AppBar(
-          title: Text("Home"),
-          backgroundColor: kPrimaryColor,
-          elevation: 0.1,
-          actions: <Widget>[
-            new IconButton(onPressed: (){Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (_) => Recherche()),
-                    (Route<dynamic> route) => false);}, icon: Icon(Icons.search,color: Colors.white,))
-          ],
-        ),
+        drawer: NavBar(),
+        appBar: AppBar(title: Text("Home"),backgroundColor: kPrimaryColor,),
         body:SingleChildScrollView(
           child: Center(
             child: Column(
@@ -125,7 +97,21 @@ class _HomePageState extends State<HomePage> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
-
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: RaisedButton(
+                                      onPressed: (){
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (_)=>
+                                                ModifierBackend(
+                                                    content:myComp[index]
+                                                )));
+                                      },
+                                      color:Colors.red,
+                                      child: Icon(Icons.edit,color: Colors.white),
+                                    ),
+                                  )
                                 ],
                               ),
                             )),
@@ -145,5 +131,17 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
-
+Map<int, Color> color =
+{
+  50:Color.fromRGBO(111,53,165, .1),
+  100:Color.fromRGBO(111,53,165, .2),
+  200:Color.fromRGBO(111,53,165, .3),
+  300:Color.fromRGBO(111,53,165, .4),
+  400:Color.fromRGBO(111,53,165, .5),
+  500:Color.fromRGBO(111,53,165, .6),
+  600:Color.fromRGBO(111,53,165, .7),
+  700:Color.fromRGBO(111,53,165, .8),
+  800:Color.fromRGBO(111,53,165, .9),
+  900:Color.fromRGBO(111,53,165, 1),
+};
+MaterialColor colorCustom = MaterialColor(0xFF6F35A5, color);

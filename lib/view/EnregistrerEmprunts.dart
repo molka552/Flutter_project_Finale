@@ -1,3 +1,4 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fluterfinale/Comm/NavBar.dart';
 import 'package:fluterfinale/Comm/comHelper.dart';
 import 'package:fluterfinale/Comm/genTextFormField.dart';
@@ -7,7 +8,7 @@ import 'package:fluterfinale/constant.dart';
 import 'package:fluterfinale/view/LoginForm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:toast/toast.dart';
+import 'package:intl/intl.dart';
 
 class EnregistrerE extends StatefulWidget {
   const EnregistrerE({Key? key}) : super(key: key);
@@ -25,11 +26,7 @@ class _EnregistrerEState extends State<EnregistrerE> {
   final _conCPassword = TextEditingController();
   var dbHelper;
 
-  @override
-  void initState() {
-    super.initState();
-    dbHelper = DbHelper();
-  }
+  final helper = DbHelper.instance;
 
   signUp() async {
     String uid = _conUserId.text;
@@ -60,9 +57,25 @@ class _EnregistrerEState extends State<EnregistrerE> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime date=DateTime.now();
+    /*final format = new DateFormat('yyyy-MM-dd ');*/
+    Future<Null> selectTimePicker(BuildContext context,currentValue) async {
+      final DateTime? picked = await showDatePicker(
+          context: context,
+          initialDate:currentValue,
+          firstDate: DateTime(1940),
+          lastDate: DateTime(2030)
+      );
+      if (picked != null && picked != date) {
+        setState(() {
+          date = picked;
+          print(date.toString());
+        });
+      }
+    }
     Size size=MediaQuery.of(context).size;
     return Scaffold(
-      drawer: NavBar(),
+    drawer: NavBar(),
       appBar: AppBar(
         title: Text("Enregistrer les emprunts"),
         backgroundColor: kPrimaryColor,
@@ -87,10 +100,16 @@ class _EnregistrerEState extends State<EnregistrerE> {
                 children: [
                   SvgPicture.asset("assets/images/m12.svg",height:size.height*0.35,
                   ),
-                  getTextFormField(
-                      controller: _conUserId,
-                      icon: Icons.person,
-                      hintName: "Date"),
+                  Column(
+                    children: [
+                      FlatButton(onPressed: (){
+                        selectTimePicker(context,DateTime.now());
+                      }, child: Text('choisir une date'),color:Colors.blue,
+                      textColor: Colors.white,),
+                    ],
+                  ),
+
+Text(date.toString()),
                   SizedBox(height: 5.0),
                   getTextFormField(
                       controller: _conUserName,
@@ -126,5 +145,6 @@ class _EnregistrerEState extends State<EnregistrerE> {
         ),
       ),
     );
+
   }
 }
