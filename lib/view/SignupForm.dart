@@ -128,55 +128,20 @@ class  _SignupFormState extends State<SignupForm> {
     String cpassword=_myCPwdController.text;
 
     if(id.isEmpty){
-      Fluttertoast.showToast(
-          msg: "pls enter ID",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "entre votre id");
+
     } else if(name.isEmpty){
-      Fluttertoast.showToast(
-          msg: "pls enter name",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "entre votre nom");
+
     }else if(email.isEmpty){
-      Fluttertoast.showToast(
-          msg: "pls enter email",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Entre votre email");
+
     }else if(password.isEmpty){
-      Fluttertoast.showToast(
-          msg: "pls enter password",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Entre votre mot de passe");
+
     }else if(password !=cpassword){
-      Fluttertoast.showToast(
-          msg: "pls verify password",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, 'Non concordance des mots de passe');
+
     } else {
       _insert();
     }
@@ -191,28 +156,14 @@ class  _SignupFormState extends State<SignupForm> {
     try {
       final id = await dbaHelper.insertAdmin(row);
       if (id >0) {
-        Fluttertoast.showToast(
-            msg: "successfully saved",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
+        alertDialog(context, 'Enregistré avec succès');
+
       }
     }
     catch(error){
       print(error);
-      Fluttertoast.showToast(
-          msg: "error occured",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Erreur: échec de l'enregistrement des données");
+
     }
 
   }

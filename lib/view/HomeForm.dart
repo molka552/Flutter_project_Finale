@@ -17,7 +17,7 @@ class _HomeFormState extends State<HomeForm> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.lightGreen
+          primarySwatch: Colors.purple
       ),
       home: HomePage(),
     );

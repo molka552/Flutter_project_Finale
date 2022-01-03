@@ -102,7 +102,7 @@ class _LoginFormState extends State<LoginForm> {
       alertDialog(context, 'saisir id');
 
     }else if(password.isEmpty){
-      alertDialog(context, "saisir ");
+      alertDialog(context, "saisir mot de passe ");
 
     } else {
       _login(id,password);
@@ -117,15 +117,8 @@ class _LoginFormState extends State<LoginForm> {
 
 
     await dbaHelper.getAdmin(row).then((value) { if (value == null) {
-      Fluttertoast.showToast(
-          msg: "Admin does not exist",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Error: User Not Found");
+
     } else {
       Navigator.push(context,
           MaterialPageRoute(builder: (_)=>HomeForm()));

@@ -61,7 +61,7 @@ class _RechercheState extends State<Recherche> {
                 child: TextField(
 
                   decoration: InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide(color:Colors.red)), labelText: 'Key word', prefixIcon: Icon(Icons.search),
+                      border: OutlineInputBorder(borderSide: BorderSide(color:Colors.purple)), labelText: 'Mot-clé', prefixIcon: Icon(Icons.search),
                   ),
                   onChanged: (value){
                     keyword=value;

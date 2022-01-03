@@ -1,4 +1,5 @@
 import 'package:fluterfinale/Comm/NavBar.dart';
+import 'package:fluterfinale/Comm/comHelper.dart';
 import 'package:fluterfinale/Comm/genTextFormField.dart';
 import 'package:fluterfinale/DataBaseHandler/DbHelper.dart';
 import 'package:flutter/material.dart';
@@ -166,45 +167,16 @@ class _NewCState extends State<NewC> {
     String qte = quantity.text;
 
     if (id.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Pls enter ID of the component",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Erreur: échec de l'enregistrement des données");
+
     } else if (ref.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Pls enter Reference",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Erreur: échec de l'enregistrement des données");
     } else if (qte.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Pls enter Quantity",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Erreur: échec de l'enregistrement des données");
+
     } else if(SelectedValue == null){
-      Fluttertoast.showToast(
-          msg: "pls chose category",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.black,
-          fontSize: 16.0
-      );
+      alertDialog(context, "Erreur: échec de l'enregistrement des données");
+
     }
     else {
       var value= await dbaHelper.getIdCategory(SelectedValue);
@@ -227,29 +199,15 @@ class _NewCState extends State<NewC> {
     try {
       final id = await dbaHelper.insertComponent(row);
       if (id >0)  {
-        Fluttertoast.showToast(
-            msg: "successfully saved",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.blue,
-            textColor: Colors.white,
-            fontSize: 16.0
-        );
+        alertDialog(context, "enregistré avec succès");
+
       }
 
     }
     catch (error) {
       print(error);
-      Fluttertoast.showToast(
-          msg: "error occured",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      alertDialog(context, "erreur est survenu");
+
     }
 
 
