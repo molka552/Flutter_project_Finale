@@ -1,4 +1,4 @@
-# fluterfinale
+# gestion de stocke
 
 A new Flutter project.
 
